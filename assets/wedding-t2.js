@@ -35,6 +35,7 @@
   var musicShouldPlay = false;
   var userMuted = false;
   var musicRetryBound = false;
+  var tasselMusicPrimed = false;
   var mapLoaded = false;
   var nikahMapLoaded = false;
   var walimaMapLoaded = false;
@@ -1032,7 +1033,11 @@
       tassel.classList.add("is-opening");
     }
 
-    startMusic();
+    if (tasselMusicPrimed) {
+  ensureMusicPlaying();
+} else {
+  startMusic();
+}
 
     setTimeout(function () {
       if (cover) cover.classList.add("is-fading");
@@ -1101,9 +1106,13 @@
       if (coverOpening) return;
       if (e.button !== undefined && e.button !== 0) return;
 
-      unlockAudioFromGesture();
+      // unlockAudioFromGesture();
+        tassel.classList.add("is-hint-dismissed");
+
+  // Start music from the real tassel gesture.
+  startMusicFromTasselGesture();
       readyToOpen = false;
-      
+
       dragging = true;
       activePointerId = e.pointerId;
       startY = getClientY(e);
@@ -1603,6 +1612,63 @@
     if (show) muteBtn.removeAttribute("aria-hidden");
     else muteBtn.setAttribute("aria-hidden", "true");
   }
+
+  function startMusicFromTasselGesture() {
+  if (!audio || isSongDisabled()) return;
+
+  musicShouldPlay = true;
+  userMuted = false;
+  tasselMusicPrimed = true;
+
+  applyMusicVolume();
+
+  // Start muted during the actual pointer gesture.
+  // Once playback begins, unmute it.
+  audio.muted = true;
+
+  function finishTasselMusic() {
+    if (!audio || !musicShouldPlay || userMuted) return;
+
+    audio.muted = false;
+    showMuteButton(true);
+
+    muteBtn.textContent = "🔊";
+    muteBtn.setAttribute("aria-label", "Mute music");
+  }
+
+  try {
+    var playPromise = audio.play();
+
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise
+        .then(function () {
+          finishTasselMusic();
+        })
+        .catch(function () {
+          // The audio may still be loading.
+          var retry = function () {
+            audio.removeEventListener("canplay", retry);
+            audio.removeEventListener("loadeddata", retry);
+
+            audio.play()
+              .then(function () {
+                finishTasselMusic();
+              })
+              .catch(function () {
+                /* wait for another gesture */
+              });
+          };
+
+          audio.addEventListener("canplay", retry, { once: true });
+          audio.addEventListener("loadeddata", retry, { once: true });
+        });
+    } else {
+      finishTasselMusic();
+    }
+  } catch (err) {
+    /* ignore */
+  }
+}
 
   function startMusic() {
     if (!audio || isSongDisabled()) {
