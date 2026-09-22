@@ -1149,7 +1149,7 @@ body.wed2-has-hero-verse .wed2-hero {
 }
 
 body.wed2-has-hero-verse .wed2-ring-wrap {
-  top: 58% !important;
+  top: 52%;
 }
 
 .wed2-hero-verse {
@@ -1206,7 +1206,7 @@ body:not(.wed2-has-hero-verse) .wed2-hero-verse {
 
 .wed2-ring-wrap {
   position: absolute;
-  top: 54% !important;
+  top: 46%;
   left: 50%;
   width: min(66vw, 300px);
   aspect-ratio: 1;
@@ -3230,9 +3230,19 @@ body.wed2-bride-first.wed2-ring-names-center .wed2-ring-name-groom {
     --wed2-hero-verse-top: 32%;
   }
   body.wed2-has-hero-verse .wed2-hero {
+    --wed2-bismillah-settle-top: 8%;
+  }
+  body.wed2-has-hero-verse .wed2-ring-wrap { width: min(74vw, 260px); top: 54%; }
+
+  /* Mobile hero positioning — matches the intended higher layout.
+     The current page does not use the optional wed2-has-hero-verse body class. */
+  .wed2-hero {
     --wed2-bismillah-settle-top: calc(8% - 15px);
   }
-  body.wed2-has-hero-verse .wed2-ring-wrap { width: min(74vw, 260px); top: 47% !important; }
+  .wed2-ring-wrap {
+    width: min(74vw, 260px);
+    top: 47% !important;
+  }
   .wed2-ring-name { font-size: clamp(2rem, 7.5vw, 3rem); }
   body.wed2-ring-names-smaller .wed2-ring-name {
     font-size: clamp(1.9rem, 6.8vw, 2.8rem);
@@ -3439,85 +3449,3 @@ body[data-opening-loader="true"] .wed2-opening-loader-hint {
 
 /* Aejaz & Firdous: keep the couple illustration visible even if the intro animation has already completed. */
 .wed2-hero-couple { opacity: 1 !important; }
-
-/* =========================================================
-   WEBSITE CREATOR CREDIT
-   ========================================================= */
-
-/* .shabaz-credit {
-  position: fixed;
-  right: 14px;
-  bottom: 12px;
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  padding: 6px 10px;
-
-  background: rgba(255, 250, 244, 0.88);
-  border: 1px solid rgba(166, 124, 61, 0.35);
-  border-radius: 999px;
-
-  box-shadow: 0 3px 14px rgba(107, 29, 50, 0.12);
-
-  color: #6b1d32;
-
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 0.72rem;
-  line-height: 1;
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-
-  pointer-events: none;
-
-  opacity: 0.88;
-}
-
-.shabaz-credit-label {
-  color: #8b5e48;
-  font-size: 0.68rem;
-}
-
-.shabaz-credit-heart {
-  color: #a67c3d;
-  font-size: 0.7rem;
-  margin: 0 1px;
-}
-
-.shabaz-credit-by {
-  color: #8b5e48;
-  font-size: 0.65rem;
-}
-
-.shabaz-credit-name {
-  color: #6b1d32;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .shabaz-credit {
-    right: 8px;
-    bottom: 8px;
-
-    padding: 5px 8px;
-
-    font-size: 0.65rem;
-  }
-
-  .shabaz-credit-label {
-    font-size: 0.61rem;
-  }
-
-  .shabaz-credit-by {
-    font-size: 0.59rem;
-  }
-
-  .shabaz-credit-name {
-    font-size: 0.67rem;
-  }
-} */
