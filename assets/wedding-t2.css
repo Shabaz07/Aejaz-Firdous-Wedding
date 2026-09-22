@@ -3232,7 +3232,7 @@ body.wed2-bride-first.wed2-ring-names-center .wed2-ring-name-groom {
   body.wed2-has-hero-verse .wed2-hero {
     --wed2-bismillah-settle-top: calc(8% - 15px);
   }
-  body.wed2-has-hero-verse .wed2-ring-wrap { width: min(74vw, 260px); top: calc(54% - 15px);}
+  body.wed2-has-hero-verse .wed2-ring-wrap { width: min(74vw, 260px); top: 47% !important; }
   .wed2-ring-name { font-size: clamp(2rem, 7.5vw, 3rem); }
   body.wed2-ring-names-smaller .wed2-ring-name {
     font-size: clamp(1.9rem, 6.8vw, 2.8rem);
