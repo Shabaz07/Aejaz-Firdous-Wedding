@@ -1076,15 +1076,17 @@
     }
 
     function getOpenThresholdY() {
-      return getViewportHeight() * TASSEL_OPEN_RATIO;
+      return getViewportHeight() * 0.35;
     }
 
     function updatePull(nextPull) {
   pullY = Math.max(0, nextPull);
   tassel.style.setProperty("--tassel-pull", pullY + "px");
 
-  var rect = tassel.getBoundingClientRect();
-  var nearOpen = rect.bottom >= getOpenThresholdY();
+  // var rect = tassel.getBoundingClientRect();
+  // var nearOpen = rect.bottom >= getOpenThresholdY();
+  var openThreshold = getViewportHeight() * 0.35;
+  var nearOpen = pullY >= openThreshold;
 
   tassel.classList.toggle("is-near-open", nearOpen);
 
