@@ -1063,6 +1063,7 @@
     var startY = 0;
     var pullY = 0;
     var activePointerId = null;
+    var readyToOpen = false;
 
     function getClientY(e) {
       if (e.touches && e.touches.length) return e.touches[0].clientY;
@@ -1074,18 +1075,19 @@
     }
 
     function updatePull(nextPull) {
-      pullY = Math.max(0, nextPull);
-      tassel.style.setProperty("--tassel-pull", pullY + "px");
+  pullY = Math.max(0, nextPull);
+  tassel.style.setProperty("--tassel-pull", pullY + "px");
 
-      var rect = tassel.getBoundingClientRect();
-      var nearOpen = rect.bottom >= getOpenThresholdY();
-      tassel.classList.toggle("is-near-open", nearOpen);
+  var rect = tassel.getBoundingClientRect();
+  var nearOpen = rect.bottom >= getOpenThresholdY();
 
-      if (nearOpen) {
-        openInvitation();
-        endDrag(true);
-      }
-    }
+  tassel.classList.toggle("is-near-open", nearOpen);
+
+  // Wait until the user releases the tassel.
+  // This keeps openInvitation() inside the real user gesture
+  // so music autoplay is allowed.
+  readyToOpen = nearOpen;
+}
 
     function endDrag(skipSnap) {
       dragging = false;
@@ -1100,7 +1102,8 @@
       if (e.button !== undefined && e.button !== 0) return;
 
       unlockAudioFromGesture();
-
+      readyToOpen = false;
+      
       dragging = true;
       activePointerId = e.pointerId;
       startY = getClientY(e);
@@ -1127,9 +1130,22 @@
     }
 
     function onPointerUp(e) {
-      if (e.pointerId !== activePointerId) return;
-      endDrag(false);
-    }
+  if (e.pointerId !== activePointerId) return;
+
+  if (readyToOpen && !coverOpening) {
+    readyToOpen = false;
+    tassel.classList.add("is-hint-dismissed");
+
+    // Open + start music from the user's release gesture.
+    openInvitation();
+
+    endDrag(true);
+    return;
+  }
+
+  readyToOpen = false;
+  endDrag(false);
+}
 
     tassel.addEventListener("pointerdown", onPointerDown);
     tassel.addEventListener("pointermove", onPointerMove);
